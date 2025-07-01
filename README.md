@@ -1,3 +1,5 @@
+--- Fork by OmegaAlfa7; some info below may only apply to the original branch; I've tried to update to the specifics of this branch; Which uses a gen 1 Shelly EM (sometimes called EM1) ---
+
 # 2 .py files
 one for grid and the other for PV.
 Grid is in CT clamp 0 and PV inverter is in CT Clamp 1.
