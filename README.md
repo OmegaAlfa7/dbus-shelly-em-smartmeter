@@ -27,10 +27,8 @@ This is my first project with the Victron Venus OS on GitHub, so I took some ide
 
 ## How it works
 ### My setup
-- Shelly EM firmware (20230503-102005/v1.13.0-g9aed950)
-- Venus OS on Raspberry PI 4 4GB version 1.1 - Firmware v2.84
-  - No other devices from Victron connected
-  - Connected to Wifi netowrk "A"
+- Shelly EM (gen 1, or "EM1)
+- Venus OS on MP2-GX
 
 ### Details / Process
 As mentioned above the script is inspired by @fabian-lauer dbus-shelly-3em-smartmeter implementation.
@@ -53,13 +51,22 @@ Thats it 😄
 
 
 ## Install & Configuration
+### Preparation steps:
+setup MQTT broker in Home Assistant
+setup Shelly EM to broadcast MQTT (gen 1 Shelly cannot simultaneously send data to Cloud, unfortunately)
+enable MQTT in GX-device (and TCP-modbus too? Not sure if this is really necessary)
+in GX-device: Setup access as superuser
+Setup the GX-device (and Multiplus inverter/charger), incl. the ESS assistant
+Use Putty to login to the GX-device as "root"
+Use Putty to excecute command below
+
 ### Get the code
 Just grap a copy of the main branche and copy them to a folder under `/data/` e.g. `/data/dbus-shelly-1pm-pvinverter`.
 After that call the install.sh script.
 
-The following script should do everything for you:
+The following script should do everything for you
 ```
-wget https://github.com/Goaheadz/dbus-shelly-em-smartmeter/archive/refs/heads/main.zip
+wget https://github.com/OmegaAlfa7/dbus-shelly-em-smartmeter/archive/refs/heads/main.zip
 unzip main.zip "dbus-shelly-em-smartmeter-main/*" -d /data
 mv /data/dbus-shelly-em-smartmeter-main /data/dbus-shelly-em-smartmeter
 chmod a+x /data/dbus-shelly-em-smartmeter/install.sh
