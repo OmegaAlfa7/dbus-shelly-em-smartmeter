@@ -52,13 +52,13 @@ Thats it 😄
 
 ## Install & Configuration
 ### Preparation steps:
-setup MQTT broker in Home Assistant
-setup Shelly EM to broadcast MQTT (gen 1 Shelly cannot simultaneously send data to Cloud, unfortunately)
-enable MQTT in GX-device (and TCP-modbus too? Not sure if this is really necessary)
-in GX-device: Setup access as superuser
-Setup the GX-device (and Multiplus inverter/charger), incl. the ESS assistant
-Use Putty to login to the GX-device as "root"
-Use Putty to excecute command below
+-setup MQTT broker in Home Assistant
+-setup Shelly EM to broadcast MQTT (gen 1 Shelly cannot simultaneously send data to Cloud, unfortunately)
+-enable MQTT in GX-device (and TCP-modbus too? Not sure if this is really necessary)
+-in GX-device: Setup access as superuser
+-Setup the GX-device (and Multiplus inverter/charger), incl. the ESS assistant
+-Use Putty to login to the GX-device as "root"
+-Use Putty to excecute command below
 
 ### Get the code
 Just grap a copy of the main branche and copy them to a folder under `/data/` e.g. `/data/dbus-shelly-1pm-pvinverter`.
