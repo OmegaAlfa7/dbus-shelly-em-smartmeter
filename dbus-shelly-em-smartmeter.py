@@ -137,22 +137,24 @@ class DbusShellyemService:
     try:
        #get data from Shelly em
        meter_data = self._getShellyData()
-      
-      
        
        #send data to DBus
+       #use [0] for first clamp - change to [1] for second clamp in Shelly EM
        self._dbusservice['/Ac/L1/Voltage'] = meter_data['emeters'][0]['voltage']
+       self._dbusservice['/Ac/L1/Power'] = meter_data['emeters'][0]['power']
  
-       current = meter_data['emeters'][1]['power'] / meter_data['emeters'][0]['voltage']
+       current = meter_data['emeters'][0]['power'] / meter_data['emeters'][0]['voltage']
        self._dbusservice['/Ac/L1/Current'] = current
-
-       #change to [1] for second probe in Shelly EM
-       self._dbusservice['/Ac/L1/Power'] = meter_data['emeters'][1]['power']
-       self._dbusservice['/Ac/L1/Energy/Forward'] = (meter_data['emeters'][1]['total']/1000)
-       self._dbusservice['/Ac/L1/Energy/Reverse'] = (meter_data['emeters'][1]['total_returned']/1000)    
-       
+       self._dbusservice['/Ac/L1/Energy/Forward'] = (meter_data['emeters'][0]['total']/1000)
+       self._dbusservice['/Ac/L1/Energy/Reverse'] = (meter_data['emeters'][0]['total_returned']/1000)
         
        #self._dbusservice['/Ac/Power'] = meter_data['total_power'] # positive: consumption, negative: feed into grid
+
+       self._dbusservice['/Ac/Current'] = self._dbusservice['/Ac/L1/Current']  
+       self._dbusservice['/Ac/Power'] = self._dbusservice['/Ac/L1/Power']
+       self._dbusservice['/Ac/Energy/Forward'] = self._dbusservice['/Ac/L1/Energy/Forward']
+       self._dbusservice['/Ac/Energy/Reverse'] = self._dbusservice['/Ac/L1/Energy/Reverse'] 
+     
        #self._dbusservice['/Ac/L2/Voltage'] = meter_data['emeters'][1]['voltage']
        #self._dbusservice['/Ac/L2/Current'] = meter_data['emeters'][1]['current']
        #self._dbusservice['/Ac/L2/Power'] = meter_data['emeters'][1]['power']
@@ -165,15 +167,10 @@ class DbusShellyemService:
        #self._dbusservice['/Ac/L3/Energy/Forward'] = (meter_data['emeters'][2]['total']/1000)
        #self._dbusservice['/Ac/L3/Energy/Reverse'] = (meter_data['emeters'][2]['total_returned']/1000) 
        
-       self._dbusservice['/Ac/Current'] = self._dbusservice['/Ac/L1/Current']  
-       self._dbusservice['/Ac/Power'] = self._dbusservice['/Ac/L1/Power']
-       
        #+ self._dbusservice['/Ac/L2/Energy/Forward'] + self._dbusservice['/Ac/L3/Energy/Forward']
        #+ self._dbusservice['/Ac/L2/Energy/Reverse'] + self._dbusservice['/Ac/L3/Energy/Reverse'] 
        
 
-       self._dbusservice['/Ac/Energy/Forward'] = self._dbusservice['/Ac/L1/Energy/Forward']
-       self._dbusservice['/Ac/Energy/Reverse'] = self._dbusservice['/Ac/L1/Energy/Reverse'] 
 
       
      
@@ -227,17 +224,15 @@ def main():
       _w = lambda p, v: (str(round(v, 1)) + 'W')
       _v = lambda p, v: (str(round(v, 1)) + 'V')   
      
-      #start our main-service com.victronenergy.pvinverter instead of com.victronenergy.grid
+      #start our main-service com.victronenergy.grid , not com.victronenergy.pvinverter
       pvac_output = DbusShellyemService(
-        servicename='com.victronenergy.pvinverter',
+        servicename='com.victronenergy.grid',
         paths={
           '/Ac/Energy/Forward': {'initial': 0, 'textformat': _kwh}, # energy bought from the grid
           '/Ac/Energy/Reverse': {'initial': 0, 'textformat': _kwh}, # energy sold to the grid
           '/Ac/Power': {'initial': 0, 'textformat': _w},
-          
           '/Ac/Current': {'initial': 0, 'textformat': _a},
           '/Ac/Voltage': {'initial': 0, 'textformat': _v},
-          
           '/Ac/L1/Voltage': {'initial': 0, 'textformat': _v},
           #'/Ac/L2/Voltage': {'initial': 0, 'textformat': _v},
           #'/Ac/L3/Voltage': {'initial': 0, 'textformat': _v},
